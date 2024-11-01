@@ -1,10 +1,13 @@
-require('dotenv').config();
+const dotenv = require('dotenv')
 const express = require('express');
 const cors = require('cors');
 const { todoRouter } = require('./routes/todo.js');
 const { userRouter } = require('./routes/user.js');
 
-const environment = process.env.NODE_ENV; // Fixed typo
+const environment = process.env.NODE_ENV;
+dotenv.config();
+
+// dotenv.config({ path: environment === 'test' ? '.env.test' : '.env' });
 const app = express();
 
 app.use(cors());

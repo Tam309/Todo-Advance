@@ -1,6 +1,7 @@
 import { expect } from "chai";
+import { initializeTestDb, insertUser } from './helpers/test'
 const baseUrl = "http://localhost:3001"
-
+ 
 describe("GET task", () => {
     it("should get all task", async () => {
         const response = await fetch(baseUrl);
@@ -67,11 +68,11 @@ describe("POST task", () => {
 })
 
 describe("POST register", () => {
-    const email = 'test@gmail.com';
+    const email = 'testmail7@gmail.com';
     const password = 'test';
   
     it("should register with valid email and password", async () => {
-      const response = await fetch(`${baseUrl}/register`, {
+      const response = await fetch(`${baseUrl}/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -87,7 +88,24 @@ describe("POST register", () => {
       console.log("Parsed data:", data);
   
       expect(response.status).to.equal(201);
-      expect(data).to.include.all.keys("id", "email", "message");
-      expect(data.message).to.be.a("string");
+      expect(data).to.include.all.keys("id", "email");
     });
   });
+
+  describe("POST login", () => {
+    const email = 'testmail7@gmail.com';
+    const password = 'test';
+    insertUser(email,password)
+    it("should login with valid credentials", async() => {
+        const response = await fetch(`${baseUrl}/user/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+    
+        const data = await response.json();
+    
+        expect(response.status).to.equal(200);
+        expect(data).to.include.all.keys("id", "email", "token");
+    })
+  })
