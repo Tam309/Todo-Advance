@@ -1,6 +1,7 @@
-const fs = require('fs')
-const path = require('path')
-import { query } from './db'
+import fs from 'fs'
+import path from 'path'
+import { query } from './db.js'
+import { hash } from "bcrypt";
 
 const _dirname = import.meta.dirname
 
@@ -15,4 +16,4 @@ const insertUser = (email,password) => {
     })
 }
 
-module.exports = { initializeTestDb, insertUser }
+export { initializeTestDb, insertUser }

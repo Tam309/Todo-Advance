@@ -3,4 +3,4 @@ const emptyOrRows = (result) => {
     return result.rows 
 }
 
-module.exports = { emptyOrRows }
+export { emptyOrRows }

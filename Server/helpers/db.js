@@ -1,6 +1,9 @@
-require('dotenv').config();
-const { Pool } = require('pg');
+import dotenv from "dotenv"
+import pkg from 'pg';
 
+const { Pool } = pkg;
+
+dotenv.config();  
 console.log("Environment:", process.env.NODE_ENV);  // Add this line to verify
 
 
@@ -24,4 +27,4 @@ const query = (sql, values = []) => {
   });
 };
 
-module.exports = { query };
+export { query };

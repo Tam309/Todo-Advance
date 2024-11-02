@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "testStart": "NODE_ENV=test mocha *.test.mjs",
+    "testStart": "NODE_ENV=test mocha *.test.js",
     "devStart": "NODE_ENV=development nodemon index.js",
-    "test": "mocha *.test.mjs"
+    "test": "mocha *.test.js"
   },
   "keywords": [],
   "author": "",

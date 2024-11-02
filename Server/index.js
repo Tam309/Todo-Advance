@@ -1,8 +1,8 @@
-const dotenv = require('dotenv')
-const express = require('express');
-const cors = require('cors');
-const { todoRouter } = require('./routes/todo.js');
-const { userRouter } = require('./routes/user.js');
+import dotenv from "dotenv"
+import express from "express"
+import cors from "cors"
+import { todoRouter } from "./routes/todo.js"
+import { userRouter } from "./routes/user.js"
 
 const environment = process.env.NODE_ENV;
 dotenv.config();

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { initializeTestDb, insertUser } from './helpers/test'
+import { initializeTestDb, insertUser } from './helpers/test.js'
 const baseUrl = "http://localhost:3001"
  
 describe("GET task", () => {

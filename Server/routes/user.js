@@ -1,7 +1,7 @@
-const express = require("express");
-const { query } = require("../helpers/db");
-const { hash, compare } = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import express from "express"
+import { query } from '../helpers/db.js';
+import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 const { sign } = jwt;
 
 const userRouter = express.Router();
@@ -41,7 +41,7 @@ userRouter.post("/login", async (req, res, next) => {
       const isPasswordCorrect = await compare(password, user.password);
 
       if (isPasswordCorrect) {
-        const token = sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+        const token = sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, {
           expiresIn: "1h",
         });
 
@@ -58,4 +58,4 @@ userRouter.post("/login", async (req, res, next) => {
   }
 });
 
-module.exports = { userRouter };
+export { userRouter };

@@ -1,6 +1,6 @@
-const express = require('express');
-const { query } = require('../helpers/db');
-const {emptyOrRows} = require('./emptyOrRow')
+import express from "express"
+import { query } from "../helpers/db.js";
+import {emptyOrRows} from './emptyOrRow.js'
 
 const todoRouter = express.Router();
 
@@ -21,8 +21,8 @@ todoRouter.get('/', async (req, res, next) => {
 // Add task
 todoRouter.post('/add', async (req, res) => {
     try {
-        const result = await query('INSERT INTO task (description) VALUES ($1) RETURNING id', [req.body.description]);
-        res.status(201).json({ id: result.rows[0].id, message: 'Task added' });
+        const result = await query('INSERT INTO task (description) VALUES ($1) RETURNING *', [req.body.description]);
+        res.status(201).json({ id: result.rows[0].id, description: result.rows[0].description, message: 'Task added' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error adding task' });
@@ -54,4 +54,4 @@ todoRouter.delete('/delete/:task_id', async (req, res) => {
     }
 });
 
-module.exports = { todoRouter };
+export { todoRouter };
