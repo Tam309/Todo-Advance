@@ -12,7 +12,7 @@ const initializeTestDb = () => {
 
 const insertUser = (email,password) => {
     hash(password,10,(error, hashedPassword) => {
-        query('insert into account (email,password) values ($1, $2)', [req.body.email, hashedPassword] )
+        query('insert into account (email,password) values ($1, $2)', [email, hashedPassword] )
     })
 }
 

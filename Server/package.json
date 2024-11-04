@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "testStart": "NODE_ENV=test mocha *.test.js",
-    "devStart": "NODE_ENV=development nodemon index.js",
-    "test": "mocha *.test.js"
+    "startServer": "cross-env NODE_ENV=test node index.js",
+    "testStart": "cross-env NODE_ENV=test mocha *.test.js",
+    "devStart": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "npm-run-all --parallel startServer testStart"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,8 @@
   },
   "devDependencies": {
     "chai": "^5.1.2",
-    "mocha": "^10.7.3"
+    "cross-env": "^7.0.3",
+    "mocha": "^10.7.3",
+    "npm-run-all": "^4.1.5"
   }
 }
