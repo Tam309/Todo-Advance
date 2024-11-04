@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import BaseUrl from './baseurl';
+import UseUser from '../context/UseUser';
+import BaseUrl from '../baseurl';
+
 
 // const BaseUrl: string = process.env.REACT_APP_BASE_URL || 'http:// localhost:3001';
 
 const Home = () => {
+    const { user } = UseUser(); 
     const [tasks, setTasks] = useState<any[]>([]);
     const [input, setInput] = useState<string>("");
 
     useEffect(() => {
-        axios.get(BaseUrl)
+        if (!user.token) {
+            return; // Wait until the token is available
+        }
+    
+        const headers = { headers: { Authorization: user.token } };
+        axios.get(BaseUrl, headers)
             .then((res) => {
                 setTasks(res.data);
             })
             .catch((err) => {
                 alert(err.response?.data?.error || err.message);
             });
-    }, []);
+    }, [user.token]);
+    
 
     const addTask = (description: string) => {
+        const headers = {headers : {Authorization:user.token}}
         if (description.trim()) {
-            axios.post(`${BaseUrl}/add`, { description })
+            axios.post(`${BaseUrl}/add`, { description }, headers)
                 .then((res) => {
                     setTasks((prevTasks) => [...prevTasks, res.data]);
                 })
@@ -34,7 +44,8 @@ const Home = () => {
     };
 
     const deleteTask = (id: number) => {
-        axios.delete(`${BaseUrl}/delete/${id}`)
+        const headers = {headers : {Authorization:user.token}}
+        axios.delete(`${BaseUrl}/delete/${id}`, headers)
             .then(() => {
                 setTasks((prevTasks) => prevTasks.filter(task => task.id !== id));
             })

@@ -1,14 +1,33 @@
 import React from 'react';
-import Home from './components/Home'; 
-import Authentication, { AuthenticationMode } from './components/Authentication';
-import ErrorPage from './components/ErrorPage';
+import Home from './screen/Home'; 
+import Authentication, { AuthenticationMode } from './screen/Authentication';
+import ErrorPage from './screen/ErrorPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';   
+import UserProvider from './context/UserProvider';  
 import './App.css';
 
-function App() {
-    return (
-        <Home />
-    );
-}
+const router = createBrowserRouter([
+    {
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/login",
+        element: <Authentication authenticationMode={AuthenticationMode.LOGIN} />
+    },
+    {
+        path: "/register",
+        element: <Authentication authenticationMode={AuthenticationMode.REGISTER} />
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/",
+                element: <Home />
+            }
+        ]
+    }
+])
 
-export default App;
+export default router;
