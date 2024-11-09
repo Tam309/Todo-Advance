@@ -16,11 +16,11 @@ export default function UserProvider({ children }: UserProviderProps) {
 
   const [user, setUser] = useState<User>(initialUser);
 
-  const signup = async (): Promise<void> => {
+  const signUp = async (): Promise<void> => {
     const headers = { headers: { "Content-Type": "application/json" } };
     try {
       await axios.post(`${BaseUrl}/user/register`, user, headers);
-      setUser({ email: "", password: "" });
+      setUser({ email: "", password: ""});
     } catch (error) {
       console.log(error);
       throw error;
@@ -36,13 +36,13 @@ export default function UserProvider({ children }: UserProviderProps) {
       sessionStorage.setItem("user", JSON.stringify(response.data));
     } catch (error) {
       console.log(error);
-      setUser({ email: "", password: "" });
+      setUser({ email: "", password: ""});
       throw error;
     }
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, signup, signIn }}>
+    <UserContext.Provider value={{ user, setUser, signUp, signIn }}>
       {children}
     </UserContext.Provider>
   );

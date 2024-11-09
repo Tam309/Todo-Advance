@@ -11,7 +11,7 @@ interface User {
 interface UserContextType {
   user: User;
   setUser: Dispatch<SetStateAction<User>>;
-  signup: () => Promise<void>;
+  signUp: () => Promise<void>;
   signIn: () => Promise<void>;
 }
 

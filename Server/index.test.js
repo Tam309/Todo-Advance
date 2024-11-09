@@ -4,15 +4,15 @@ import { startServer, stopServer } from "./testSetup.js";
 const baseUrl = "http://localhost:3001";
 
 describe("Task API Tests", function () {
-    before(async function () {
-      await startServer();
-      await initializeTestDb();
-    });
-  
-    after(async function () {
-      await stopServer();
-    });
-})
+  before(async function () {
+    await startServer();
+    await initializeTestDb();
+  });
+
+  after(async function () {
+    await stopServer();
+  });
+});
 
 describe("GET task", () => {
   it("should get all task", async () => {
@@ -65,33 +65,96 @@ describe("POST task", () => {
   });
 });
 
+// describe("POST register", () => {
+//     const email = "testmail_unique3@gmail.com";
+//     const password = "testpassword";
+
+//     beforeEach(async () => {
+//         await initializeTestDb();  // Clear database between tests to avoid duplicates
+//     });
+
+//     it("should register with valid email and password", async () => {
+//         const response = await fetch(`${baseUrl}/user/register`, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify({ email, password }),
+//         });
+
+//         let data;
+//         try {
+//             data = await response.json();  // Attempt to parse JSON
+//         } catch (error) {
+//             console.error("Failed to parse JSON. Raw response:", await response.text());
+//             throw error;  // Re-throw to allow test failure with context
+//         }
+
+//         expect(response.status).to.equal(201);
+//         expect(data).to.include.all.keys("id", "email");
+//     });
+// });
+
 describe("POST register", () => {
-    const email = "testmail_unique@gmail.com";
-    const password = "testpassword";
+  const email = "testmail_unique8@gmail.com";
+  beforeEach(async () => {
+      await initializeTestDb(); // Clear database between tests to avoid duplicates
+  });
 
-    beforeEach(async () => {
-        await initializeTestDb();  // Clear database between tests to avoid duplicates
-    });
+  it("should register with valid email and password", async () => {
+      const password = "testpassword";
+      const response = await fetch(`${baseUrl}/user/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+      });
 
-    it("should register with valid email and password", async () => {
-        const response = await fetch(`${baseUrl}/user/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
+      expect(response.status).to.equal(201);
 
-        let data;
-        try {
-            data = await response.json();  // Attempt to parse JSON
-        } catch (error) {
-            console.error("Failed to parse JSON. Raw response:", await response.text());
-            throw error;  // Re-throw to allow test failure with context
-        }
+      let data;
+      try {
+          data = await response.json();
+      } catch (error) {
+          console.error(
+              "Failed to parse JSON response during valid registration:",
+              {
+                  status: response.status,
+                  headers: response.headers.raw(),
+                  raw: await response.text() // Log the raw response
+              }
+          );
+          throw error;
+      }
 
-        expect(response.status).to.equal(201);
-        expect(data).to.include.all.keys("id", "email");
-    });
+      expect(data).to.include.all.keys("id", "email");
+  });
+
+  it("should not post a user with less than 8 character password", async () => {
+      const password = "short";
+      const response = await fetch(`${baseUrl}/user/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }), // password too short
+      });
+
+      // Check status first to handle non-JSON errors
+      expect(response.status).to.equal(400);
+
+      let data;
+      try {
+          data = await response.json();
+      } catch (error) {
+          console.error("Failed to parse JSON response:", {
+              status: response.status,
+              headers: response.headers.raw(),
+              raw: await response.text() // Log raw response if parsing fails
+          });
+          throw error;
+      }
+
+      expect(data).to.have.property("error");
+      expect(data).to.have.all.keys('error')
+  });
 });
+
 
 describe("POST login", () => {
   const email = "testmail2@gmail.com";

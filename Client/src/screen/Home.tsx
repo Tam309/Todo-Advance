@@ -15,7 +15,7 @@ const Home = () => {
         if (!user.token) {
             return; // Wait until the token is available
         }
-    
+        
         const headers = { headers: { Authorization: user.token } };
         axios.get(BaseUrl, headers)
             .then((res) => {
@@ -53,9 +53,16 @@ const Home = () => {
                 alert(err.response?.data?.error || err.message);
             });
     };
+    const logOut = () => {
+        sessionStorage.removeItem("user");
+        window.location.href = "/login";
+    }
 
     return (
         <div>
+            <div>
+                <button onClick={logOut}>Logout</button>
+            </div>
             <div>
                 <input
                     type="text"

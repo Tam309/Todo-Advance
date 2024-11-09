@@ -5,18 +5,24 @@ import jwt from "jsonwebtoken";
 const { sign } = jwt;
 
 const postRegister = async (req, res, next) => {
-    try{
-        if(!req.body.email || req.body.email.length == 0) return next(new ApiError('Invalid email', 400))
-        if(!req.body.password || req.body.password.length == 0) return next(new ApiError('Invalid password', 400))
+    try {
+        if (!req.body.email || req.body.email.length == 0) {
+            return res.status(400).json({ error: "Invalid email" });
+        }
+        if (!req.body.password || req.body.password.length < 8) {
+            return res.status(400).json({ error: "Invalid password" });
+        }
+
         const hashedPassword = await hash(req.body.password, 10);   
-        const userFromDb = await insertUser(req.body.email, hashedPassword)
-        const user = userFromDb.rows[0]
-        return res.status(201).json(createUserObject(user.id,user.email))
-    }catch(error){
-        console.error(error)
-        next(error)
+        const userFromDb = await insertUser(req.body.email, hashedPassword);
+        const user = userFromDb.rows[0];
+        return res.status(201).json(createUserObject(user.id, user.email));
+    } catch (error) {
+        console.error(error);
+        next(error);
     }
-}
+};
+
 
 const createUserObject = (id,email,token=undefined) => {
     return {
